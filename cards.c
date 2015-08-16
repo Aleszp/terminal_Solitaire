@@ -1,7 +1,7 @@
 #include "cards.h"
 
 //Tworzy talię, tasuje ją i szykuje rozdanie
-void deal(card *const waste, card *const tableau)
+void deal(card_list* waste_begin, card_list* waste,card *const tableau)
 {
 	//char *tmp;
 	card talia[52];
@@ -21,9 +21,10 @@ void deal(card *const waste, card *const tableau)
 		}
 		while(talia[los].id==0);
 		
-		umiesc(waste+i,talia+los,true);
+		add_to_waste(waste,talia+los);
+		waste=waste->next;
 	}
-	
+	waste=waste_begin;
 	//połóż na 7 slupach po tyle kart ile wynosi numer slupa, ostatnia z wierzchu karta jest widoczna
 	for(int i=0;i<7;i++)
 	{
@@ -123,36 +124,31 @@ wchar_t *opisz(card *const karta, bool wybrana)
 }
 
 //wypisuje trzy wierzchnie karty stosu, 
-void wypisz(card *const waste, card *const tableau, card *const foundation, unsigned char waste_position, unsigned wynik)
+void wypisz(card_list *const waste, card *const tableau, card *const foundation, unsigned wynik)
 {
 	fprintf(stdout,"TALIA:     ");
-	unsigned char ile[3];
-	ile[0]=waste_position;
-	ile[1]=waste_position;
-	ile[2]=waste_position;
+	
 	wchar_t *tmp;
-	//Wypisz 3 karty z wierzchu stosu
-	for(unsigned char i=0;i<3;i++)
+	card_list *wsk=waste;
+	
+	if(waste!=NULL)
 	{
-		if(ile[i]>24) break;
-		while(ile[i]<=24)
+		//Wypisz 3 karty z wierzchu stosu
+		for(unsigned char i=0;i<3;i++)
 		{
-			if(waste[ile[i]].id==0)
-			{
-				ile[i]++;
-				continue;
-			}
-			for(unsigned char j=0;j<i;j++)
-				if(ile[i]==ile[j])
-				{
-					ile[i]++;
-					continue;
-				}
-			break;
+			tmp=opisz(&(wsk->karta),0);
+			fprintf(stdout,"%ls",tmp);
+			free(tmp);
+			
+			if(wsk->next!=NULL)
+				wsk=wsk->next;
+			else
+				break;
 		}
-		tmp=opisz(&(waste[ile[i]]),0);
-		fprintf(stdout,"%ls",tmp);
-		free(tmp);
+	}
+	else
+	{
+		fprintf(stdout,"XX");
 	}
 	
 	//Wypisz zawartość stosików:
@@ -196,7 +192,32 @@ unsigned char wybor()
 	return 0;
 }
 
-void deal_next(card *const waste, unsigned *const rozdania, unsigned char *const waste_position, int *const score)
+void deal_next(card_list *const waste, unsigned *const rozdania, int *const score)
 {
 	
+}
+
+void add_to_waste(card_list *const waste,card *const from)
+{
+	waste->karta.id=from->id;
+	from->id=0;
+	waste->karta.visible=true;
+}
+
+card_list* create_waste()
+{
+	card_list* waste_begin=(card_list*)malloc(sizeof(card_list)); //i=0
+	card_list *tmp1, *tmp2;
+	tmp1=waste_begin;
+	tmp1->prev=NULL;
+	for(unsigned char i=1;i<24;i++) //i=1, bo już stworzono i=0
+	{
+		tmp2=(card_list*)malloc(sizeof(card_list));
+		tmp1->next=tmp2;
+		tmp2->prev=tmp1;
+		tmp1=tmp2;
+	}
+	tmp1->next=NULL;
+	
+	return waste_begin;
 }

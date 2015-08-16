@@ -5,10 +5,10 @@ int main(void)
 	srand (time (NULL));
 	bool play=true;
 	bool game=true;
-	card waste[24];
+	card_list* waste_begin=create_waste();
+	card_list* waste=waste_begin;
 	card tableau[140];
 	card foundation[52];
-	unsigned char waste_position;
 	int score;
 	unsigned rozdania=0;
 	unsigned char decyzja;
@@ -22,7 +22,7 @@ int main(void)
 	//w tej pętli trwa gra dopóki gracz jej nie zakończy, w razie wygranej umożliwia rozpoczęcie kolejnego rozdania
 	do
 	{
-		//opróżnij wasteiki 
+		//opróżnij stosiki
 		for(card *wsk=tableau;wsk!=tableau+139;wsk++)
 		{
 			wsk->id=0;
@@ -34,19 +34,18 @@ int main(void)
 			wsk->id=0;
 			wsk->visible=true;
 		}
-		//deal
-		deal(waste, tableau);
+		//deal cards
+		deal(waste_begin,waste, tableau);
 		//ustaw wartości domyślne zmiennych
 		game=true;
-		waste_position=24;
 		score=0;
 		rozdania=0;
-		
+		waste=waste_begin;
 		//w tej pętli graczowi wyświetlane są karty i opcje, gracz wybiera akcje
 		do
 		{
 			//wypisz karty
-			wypisz(waste, tableau, foundation, waste_position, score);
+			wypisz(waste, tableau, foundation, score);
 			
 			//pozwól wybrać graczowi co robić
 			decyzja=wybor();
@@ -57,7 +56,7 @@ int main(void)
 			}
 			if(decyzja==3)game=false;	//nowe rozdanie?
 			else if(decyzja==4)play=false;		//koniec gry?
-			else if(decyzja==2)deal_next(waste, &rozdania, &waste_position, &score); //czy gracz chce rozdać kolejne karty?
+			else if(decyzja==2)deal_next(waste, &rozdania, &score); //czy gracz chce rozdać kolejne karty?
 			//else przeloz();
 		}
 		while(game&&play); //czy rozdanie trwa?
