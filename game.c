@@ -72,7 +72,7 @@ wchar_t *opisz(card *const karta, bool wybrana)
 }
 
 //wypisuje trzy wierzchnie karty stosu, 
-void wypisz(card_list *const waste, card *const tableau, card *const foundation, unsigned wynik)
+void wypisz(card_list *const waste, card_list *const waste_begin, card *const tableau, card *const foundation, unsigned wynik)
 {
 	fprintf(stdout,"TALIA:     ");
 	
@@ -88,8 +88,8 @@ void wypisz(card_list *const waste, card *const tableau, card *const foundation,
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 			
-			if(wsk->next!=NULL)
-				wsk=wsk->next;
+			if(wsk->prev!=NULL)
+				wsk=wsk->prev;
 			else
 				break;
 		}
@@ -140,9 +140,34 @@ unsigned char wybor()
 	return 0;
 }
 
-void deal_next(card_list *const waste, unsigned *const rozdania, int *const score)
+void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rozdania, int *const score)
 {
-	
+	card_list *tmp=*waste;
+	if(tmp==NULL)
+	{
+		tmp=waste_begin;
+		for(unsigned char i=0;i<2;i++)
+		{	
+			tmp=tmp->next;
+			if(tmp->next==NULL)
+				break;
+		}
+	}
+	else
+	{	
+		if(tmp->next==NULL)
+			tmp=NULL;
+		else
+		{	
+			for(unsigned char i=0;i<3;i++)
+			{
+				if(tmp->next==NULL)
+					break;
+				tmp=tmp->next;
+			}
+		}
+	}
+	*waste=tmp;
 }
 
 
