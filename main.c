@@ -4,13 +4,14 @@ int main(void)
 {
 	srand (time (NULL));
 	bool play=true;
+	bool three=false; //if true than cards will be dealt in groups of three, otherwise one at a time
 	card_list* waste_begin=create_waste();
 	card_list* waste;
 	card tableau[140];
 	card foundation[52];
 	int score;
 	unsigned rozdania=0;
-	unsigned char decyzja;
+	unsigned char decision;
 	
 	if (!setlocale(LC_CTYPE, "")) 
 	{
@@ -45,18 +46,18 @@ int main(void)
 		do
 		{
 			//wypisz karty
-			wypisz(waste, waste_begin, tableau, foundation, score);
+			show_cards(waste, tableau, foundation, score, three);
 			
 			//pozwól wybrać graczowi co robić
-			decyzja=wybor();
-			if(decyzja==0)
+			decision=decide();
+			if(decision==0)
 			{
 				fprintf(stdout,"Komenda nierozpozna.\n");
 				continue;
 			}
-			if(decyzja==3)break;	//nowe rozdanie?
-			else if(decyzja==4)play=false;		//koniec gry?
-			else if(decyzja==2)deal_next(&waste, waste_begin, &rozdania, &score); //czy gracz chce rozdać kolejne karty?
+			if(decision==3)break;	//nowe rozdanie?
+			else if(decision==4)play=false;		//koniec gry?
+			else if(decision==2)deal_next(&waste, waste_begin, &rozdania, &score,three); //czy gracz chce rozdać kolejne karty?
 			//else przeloz();
 		}
 		while(play); //czy rozdanie trwa?

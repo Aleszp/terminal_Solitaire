@@ -1,7 +1,7 @@
 #include "core.h"
 
 //zwraca opis karty: [znak odstępu], [symbol], [wartość cyfra 1], [wartość cyfra 2], [znak odstępu]
-wchar_t *opisz(card *const karta, bool wybrana)
+wchar_t *describe(card *const karta, bool wybrana)
 {
 	wchar_t *opis;
 	unsigned char id=0;
@@ -72,7 +72,7 @@ wchar_t *opisz(card *const karta, bool wybrana)
 }
 
 //wypisuje trzy wierzchnie karty stosu, 
-void wypisz(card_list *const waste, card_list *const waste_begin, card *const tableau, card *const foundation, unsigned wynik)
+void show_cards(card_list *const waste, card *const tableau, card *const foundation, unsigned wynik, bool three)
 {
 	fprintf(stdout,"TALIA:     ");
 	
@@ -82,9 +82,9 @@ void wypisz(card_list *const waste, card_list *const waste_begin, card *const ta
 	if(waste!=NULL)
 	{
 		//Wypisz 3 karty z wierzchu stosu
-		for(unsigned char i=0;i<3;i++)
+		for(unsigned char i=0;i<(three?3:1);i++)
 		{
-			tmp=opisz(&(wsk->karta),0);
+			tmp=describe(&(wsk->karta),0);
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 			
@@ -105,7 +105,7 @@ void wypisz(card_list *const waste, card_list *const waste_begin, card *const ta
 		fprintf(stdout,"\nSTOSIK %i:  ",j+1);
 		for(unsigned char k=0;k<20;k++)
 		{
-			tmp=opisz(&(tableau[20*j+k]),0);
+			tmp=describe(&(tableau[20*j+k]),0);
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 		}
@@ -117,7 +117,7 @@ void wypisz(card_list *const waste, card_list *const waste_begin, card *const ta
 		fprintf(stdout,"\nKOMÓRKA %i: ",j+1);
 		for(unsigned char k=0;k<13;k++)
 		{
-			tmp=opisz(&(foundation[13*j+k]),0);
+			tmp=describe(&(foundation[13*j+k]),0);
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 		}
@@ -127,7 +127,7 @@ void wypisz(card_list *const waste, card_list *const waste_begin, card *const ta
 }
 
 //Pozwala graczowi wybrać operację (przełóż kartę - 1 ,rozdaj trzy kolejne karty - 2, nowe rozdanie - 3, koniec gry - 4, nieznany wybór - 0)
-unsigned char wybor()
+unsigned char decide()
 {
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	
@@ -140,18 +140,22 @@ unsigned char wybor()
 	return 0;
 }
 
-void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rozdania, int *const score)
+void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rozdania, int *const score, bool three)
 {
 	card_list *tmp=*waste;
 	if(tmp==NULL)
 	{
 		tmp=waste_begin;
-		for(unsigned char i=0;i<2;i++)
-		{	
-			tmp=tmp->next;
-			if(tmp->next==NULL)
-				break;
-		}
+		if(three)
+			for(unsigned char i=0;i<2;i++)
+			{	
+				if(tmp->next==NULL)
+					break;
+				tmp=tmp->next;
+			}
+		(*rozdania)++;
+		if(*rozdania>(three?3:1))
+			*score-=(three?20:100);
 	}
 	else
 	{	
@@ -159,7 +163,7 @@ void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const 
 			tmp=NULL;
 		else
 		{	
-			for(unsigned char i=0;i<3;i++)
+			for(unsigned char i=0;i<(three?3:1);i++)
 			{
 				if(tmp->next==NULL)
 					break;
