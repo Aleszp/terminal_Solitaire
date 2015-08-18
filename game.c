@@ -141,7 +141,7 @@ unsigned char decide()
 	return 0;
 }
 
-void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rozdania, int *const score, bool three)
+void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rounds, int *const score, bool three)
 {
 	card_list *tmp=*waste;
 	if(tmp==NULL)
@@ -154,8 +154,8 @@ void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const 
 					break;
 				tmp=tmp->next;
 			}
-		(*rozdania)++;
-		if(*rozdania>(three?3:1))
+		(*rounds)++;
+		if(*rounds>(three?3:1))
 			*score-=(three?20:100);
 	}
 	else
@@ -177,7 +177,7 @@ void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const 
 
 void settings(bool *three, bool *game)
 {
-	fprintf(stdout, "Aby rozdawać po jednej karcie wybierz 1, apy po trzy 3, dowolny inny wybór - bez zmian. \nZmiana trybu gry powoduje rozpoczęcie nowego rozdania.\nWYBOR:");
+	fprintf(stdout, "Aby rozdawać po jednej karcie wybierz 1, apy po trzy 3, dowolny inny wybór - bez zmian. \nZmiana trybu gry powoduje rozpoczęcie nowego rounds.\nWYBOR:");
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	scanf("%1s", tmp);
 	if(!strcmp(tmp,"1"))

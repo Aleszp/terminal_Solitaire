@@ -11,7 +11,7 @@ int main(void)
 	card tableau[140];
 	card foundation[52];
 	int score;
-	unsigned rozdania=0;
+	unsigned rounds=0;
 	unsigned char decision;
 	
 	if (!setlocale(LC_CTYPE, "")) 
@@ -20,40 +20,36 @@ int main(void)
         return 1;
     }
 	
-	//w tej pętli trwa gra dopóki gracz jej nie zakończy, w razie wygranej umożliwia rozpoczęcie kolejnego rozdania
+	//this loop let user play game until he/she quits. In case of winning lets user start new game.
 	do
 	{
-		//opróżnij stosiki
+		//clear tableau
 		for(card *wsk=tableau;wsk!=tableau+139;wsk++)
 		{
 			wsk->id=0;
 			wsk->visible=true;
 			wsk->chosen=false;
 		}
-		//opróżnij komórki
+		//clear foundation
 		for(card *wsk=foundation;wsk!=foundation+52;wsk++)
 		{
 			wsk->id=0;
 			wsk->visible=true;
 			wsk->chosen=false;
 		}
-		//ustaw wartości domyślne zmiennych
+		//fallback variables values to defualt ones
 		score=0;
-		rozdania=0;
+		rounds=0;
 		waste=waste_begin;
 		game=true;
-		//deal cards
+
 		deal(waste_begin,waste, tableau);
-		waste=NULL;
 		
-		//w tej pętli graczowi wyświetlane są karty i opcje, gracz wybiera akcje
+		//in this loop UI shows and player makes decisions
 		do
 		{
-			//wypisz karty
 			show_cards(waste, tableau, foundation, score, three);
-			
-			//pozwól wybrać graczowi co robić
-			decision=decide();
+			decision=decide(); //let player decide what to do
 			
 			switch(decision)
 			{
@@ -61,7 +57,7 @@ int main(void)
 				 
 				break;
 				case 2:
-					deal_next(&waste, waste_begin, &rozdania, &score,three); //deal next cards?
+					deal_next(&waste, waste_begin, &rounds, &score,three); //deal next cards?
 				break;
 				case 3:
 					game=false; //new game?
@@ -70,15 +66,25 @@ int main(void)
 					settings(&three, &game); //change settings?
 				break;
 				case 5:
-					play=false; //end of game?
+					play=false; //quit program?
 				break;
 				default:
-					fprintf(stdout,"Komenda nierozpozna.\n");
+					fprintf(stdout,"Komenda nierozpozna.\n"); //unknown command
 			}
 		}
-		while(play&&game); //czy rozdanie trwa?
+		while(play&&game); //are we still playing?
+		if(game&&play)
+		{
+			char tmp[2]; //three-sign buffer
+			fprintf(stdout, "WYGRANA, GRATULACJE! \nRozdać ponownie (T/N)? \nWYBÓR:");
+			scanf("%s",tmp);
+			if(tmp[0]=='t'||tmp[0]=='T'||tmp[0]=='Y'||tmp[0]=='y')
+				play=true;
+			else
+				play=false;
+		}
 	}
-	while(play); //czy gracz chce jeszcze grać?
+	while(play); //player wants to play or wants to quit?
 	
 	return 0;
 }

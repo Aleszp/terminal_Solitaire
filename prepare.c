@@ -40,7 +40,7 @@ void deal(card_list* waste_begin, card_list* waste,card *const tableau)
 			umiesc(&(tableau[20*i+j]),talia+los,j==i ? true: false);
 		}
 	}
-
+	waste=NULL;
 }
 
 void umiesc(card *const to, card *const from, bool visible)
