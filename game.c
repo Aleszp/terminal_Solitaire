@@ -84,7 +84,7 @@ void show_cards(card_list *const waste, card *const tableau, card *const foundat
 		//Wypisz 3 karty z wierzchu stosu
 		for(unsigned char i=0;i<(three?3:1);i++)
 		{
-			tmp=describe(&(wsk->karta),0);
+			tmp=describe(&(wsk->karta),wsk->karta.chosen);
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 			
@@ -131,12 +131,13 @@ unsigned char decide()
 {
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	
-	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj trzy kolejne karty, 3 - nowe rozdanie, 4 - koniec gry\nWYBÓR: ");
+	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - nowe rozdanie, 4 - opcje, 5 - koniec gry\nWYBÓR: ");
 	scanf("%1s", tmp);
 	if(!strcmp(tmp,"1"))return 1;
 	if(!strcmp(tmp,"2"))return 2;
 	if(!strcmp(tmp,"3"))return 3;
 	if(!strcmp(tmp,"4"))return 4;
+	if(!strcmp(tmp,"5"))return 5;
 	return 0;
 }
 
@@ -174,4 +175,20 @@ void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const 
 	*waste=tmp;
 }
 
+void settings(bool *three, bool *game)
+{
+	fprintf(stdout, "Aby rozdawać po jednej karcie wybierz 1, apy po trzy 3, dowolny inny wybór - bez zmian. \nZmiana trybu gry powoduje rozpoczęcie nowego rozdania.\nWYBOR:");
+	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
+	scanf("%1s", tmp);
+	if(!strcmp(tmp,"1"))
+	{
+		*three=false;
+		*game=false;
+	}
+	if(!strcmp(tmp,"3"))
+	{
+		*three=true;
+		*game=false;
+	}
+}
 

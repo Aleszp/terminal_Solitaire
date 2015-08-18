@@ -10,6 +10,7 @@ void deal(card_list* waste_begin, card_list* waste,card *const tableau)
 	{
 		talia[i].id=i+1;
 		talia[i].visible=1;
+		talia[i].chosen=0;
 	}
 	//połóż 24 losowe karty na stos
 	for(int i=0;i<24;i++)

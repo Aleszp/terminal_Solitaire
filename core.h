@@ -16,6 +16,7 @@ typedef struct
 {
 	unsigned char id:6;
 	bool visible	:1;
+	bool chosen		:1;
 }
 card;
 
