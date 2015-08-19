@@ -1,7 +1,7 @@
 #include "core.h"
 
 //Tworzy talię, tasuje ją i szykuje rozdanie
-void deal(card_list* waste_begin, card_list* waste,card *const tableau)
+void deal(card_list* waste_begin, card_list** waste,card *const tableau)
 {
 	//char *tmp;
 	card talia[52];
@@ -22,10 +22,9 @@ void deal(card_list* waste_begin, card_list* waste,card *const tableau)
 		}
 		while(talia[los].id==0);
 		
-		add_to_waste(waste,talia+los);
-		waste=waste->next;
+		add_to_waste(*waste,talia+los);
+		(*waste)=(*waste)->next;
 	}
-	waste=waste_begin;
 	//połóż na 7 slupach po tyle kart ile wynosi numer slupa, ostatnia z wierzchu karta jest widoczna
 	for(int i=0;i<7;i++)
 	{
@@ -40,7 +39,7 @@ void deal(card_list* waste_begin, card_list* waste,card *const tableau)
 			umiesc(&(tableau[20*i+j]),talia+los,j==i ? true: false);
 		}
 	}
-	waste=NULL;
+	*waste=NULL;
 }
 
 void umiesc(card *const to, card *const from, bool visible)

@@ -175,6 +175,7 @@ void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const 
 	*waste=tmp;
 }
 
+//Lets user change settings
 void settings(bool *three, bool *game)
 {
 	fprintf(stdout, "Aby rozdawać po jednej karcie wybierz 1, apy po trzy 3, dowolny inny wybór - bez zmian. \nZmiana trybu gry powoduje rozpoczęcie nowego rounds.\nWYBOR:");
@@ -191,4 +192,3 @@ void settings(bool *three, bool *game)
 		*game=false;
 	}
 }
-

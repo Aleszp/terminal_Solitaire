@@ -43,7 +43,7 @@ int main(void)
 		waste=waste_begin;
 		game=true;
 
-		deal(waste_begin,waste, tableau);
+		deal(waste_begin, &waste, tableau);
 		
 		//in this loop UI shows and player makes decisions
 		do
