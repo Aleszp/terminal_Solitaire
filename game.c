@@ -26,49 +26,57 @@ wchar_t *describe(card *const karta, bool wybrana)
 	if(karta->visible==false)
 		return opis;
 	
-	unsigned char numer=id%13;
-	//1 - As, 11 -Walet, 12 - Dama, 0 - Król
+	//1 - Ace, 11 -Jack, 12 - Queen, 0 - King
 	
-	switch(numer==0?id/13-1:(id-numer)/13) //♥♣♦♠
+	switch(card_color(karta)) //♥♣♦♠
 	{
-		case 0:
+		case HEARTS:
 			opis[1]=L'\u2665';
 		break;
-		case 1:
+		case CLUBS:
 			opis[1]=L'\u2663';
 		break;
-		case 2:
+		case DIAMONDS:
 			opis[1]=L'\u2666';
 		break;
-		case 3:
+		case SPADES:
 			opis[1]=L'\u2660';
 		break;
 		default:
 			opis[1]=L'!';
 	}
 	
-	switch (numer) //checks card value
+	switch (card_value(karta)) //checks card value
 	{
-		case A:
+		case ACE:
 			opis[2]=L'A';
 		break;
 		case 10:
 			opis[2]=L'1';
 			opis[3]=L'0';
 		break;
-		case J:
+		case JACK:
 			opis[2]=L'J';
 		break;
-		case Q:
+		case QUEEN:
 			opis[2]=L'Q';
 		break;
-		case K:
+		case KING:
 			opis[2]=L'K';
 		break;
 		default:
-			opis[2]=L'0'+numer;
+			opis[2]=L'0'+card_value(karta);
 	}
 	return opis;
+}
+
+unsigned char card_value(card *const karta)
+{
+	return karta->id%13;
+}
+unsigned char card_color(card *const karta)
+{
+	return ((karta->id%13)==0?(karta->id)/13-1:((karta->id)-(karta->id)%13))/13;
 }
 
 //wypisuje trzy wierzchnie karty stosu, 
@@ -191,4 +199,72 @@ void settings(bool *three, bool *game)
 		*three=true;
 		*game=false;
 	}
+}
+
+card remove_from_waste(card_list *waste)
+{
+	card tmp;
+	card_list *pointer=waste;
+	if(waste==NULL) //is waste empty?
+	{
+		//generate dummy card
+		tmp.id=0;
+		tmp.visible=true;
+		tmp.chosen=false;
+	}
+	else
+	{	
+		tmp.id=pointer->karta.id;
+		tmp.visible=true;
+		tmp.chosen=false;
+		waste=waste->prev;
+		
+		//free memory
+		waste->next=pointer->next;
+		free(pointer);
+		pointer=waste->next;
+		pointer->prev=waste;
+	}
+	return tmp;
+}
+
+bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char tableau_id)
+{
+	//is there even any card to move?
+	if(karta->id==0)
+		return false;
+	
+	//prepare temporaty pointer
+	card *tmp=tableau+20*tableau_id;
+	
+	//is this card a king?
+	if((card_value(karta)==KING))
+	{
+		//is this place empty?
+		if(tmp->id==0)
+			return true;
+		else
+			return false;
+	}
+	//for any other card
+	
+	//move pointer to top card?
+	while(((tmp+1)->id!=0)&&(tmp-(tableau+20*tableau_id)<20)) //if tebleau is full also deny
+		tmp++;
+	//is this card visible?
+	if(!tmp->visible)
+		return false;
+	//do we want to put anything on ace?
+	if(card_value(tmp)==ACE)
+		return false;
+	//are we trying to put on king anything but queen?
+	if(card_value(tmp)==KING&&card_value(karta)!=QUEEN)
+		return false;
+	//are we trying tu put card with number not being ONE lower than card on which we put it?
+	if(card_value(tmp)-1!=card_value(karta))
+		return false;
+	//are colors the same (both red or both black)?
+	if(card_color(tmp)%2==card_color(karta)%2)
+		return false;
+	return true;
 }

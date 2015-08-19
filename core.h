@@ -20,6 +20,7 @@ typedef struct
 }
 card;
 
+
 typedef struct card_list
 {
 	card karta;
@@ -27,7 +28,8 @@ typedef struct card_list
 	struct card_list* next;
 }card_list;
 
-enum card_number{A=1, J=11, Q=12, K=0};
+enum card_number{ACE=1, JACK=11, QUEEN=12, KING=0};
+enum card_color{HEARTS=0, CLUBS=1, DIAMONDS=2, SPADES=3};
 
 //Custom
 #include "prepare.h"
