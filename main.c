@@ -54,7 +54,10 @@ int main(void)
 			switch(decision)
 			{
 				case 1:
-				 
+					if(may_add_to_tableau(&(waste->karta), tableau, 7))
+						fprintf(stdout,"true\n");
+					else
+						fprintf(stdout,"false\n");
 				break;
 				case 2:
 					deal_next(&waste, waste_begin, &rounds, &score,three); //deal next cards?
