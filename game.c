@@ -231,8 +231,11 @@ card remove_from_waste(card_list *waste)
 bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char tableau_id)
 {
 	//is there even any card to move?
-	if(karta->id==0)
+	if(karta==NULL||karta->id==0)
+	{
+		fprintf(stdout,"no card\n");
 		return false;
+	}
 	
 	//prepare temporaty pointer
 	card *tmp=tableau+20*tableau_id;
@@ -244,27 +247,45 @@ bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char ta
 		if(tmp->id==0)
 			return true;
 		else
+		{
+			fprintf(stdout,"king on not empty\n");
 			return false;
+		}
 	}
 	//for any other card
 	
-	//move pointer to top card?
+	//move pointer to top card
 	while(((tmp+1)->id!=0)&&(tmp-(tableau+20*tableau_id)<20)) //if tebleau is full also deny
 		tmp++;
 	//is this card visible?
 	if(!tmp->visible)
+	{
+		fprintf(stdout,"can't place on ??\n");
 		return false;
+	}
 	//do we want to put anything on ace?
 	if(card_value(tmp)==ACE)
+	{
+		fprintf(stdout,"can't place on ace\n");
 		return false;
+	}
 	//are we trying to put on king anything but queen?
 	if(card_value(tmp)==KING&&card_value(karta)!=QUEEN)
+	{
+		fprintf(stdout,"only queen can be on king\n");
 		return false;
+	}
 	//are we trying tu put card with number not being ONE lower than card on which we put it?
-	if(card_value(tmp)-1!=card_value(karta))
+	if((card_value(tmp)-1)!=card_value(karta))
+	{
+		fprintf(stdout,"card can't be placed on other than with value raised by one, difference is: %i\n",card_value(tmp)-card_value(karta));
 		return false;
+	}
 	//are colors the same (both red or both black)?
 	if(card_color(tmp)%2==card_color(karta)%2)
+	{
+		fprintf(stdout,"wrong color\n");
 		return false;
+	}
 	return true;
 }

@@ -54,7 +54,7 @@ int main(void)
 			switch(decision)
 			{
 				case 1:
-					if(may_add_to_tableau(&(waste->karta), tableau, 7))
+					if(may_add_to_tableau(&(waste->karta), tableau, 0))
 						fprintf(stdout,"true\n");
 					else
 						fprintf(stdout,"false\n");
