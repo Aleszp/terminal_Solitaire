@@ -79,7 +79,7 @@ unsigned char card_color(card *const karta)
 	return ((karta->id%13)==0?(karta->id)/13-1:((karta->id)-(karta->id)%13))/13;
 }
 
-//wypisuje trzy wierzchnie karty stosu, 
+//shows cards
 void show_cards(card_list *const waste, card *const tableau, card *const foundation, unsigned wynik, bool three)
 {
 	fprintf(stdout,"TALIA:     ");
@@ -89,9 +89,15 @@ void show_cards(card_list *const waste, card *const tableau, card *const foundat
 	
 	if(waste!=NULL)
 	{
-		//Wypisz 3 karty z wierzchu stosu
+		//show three/one card from waste
 		for(unsigned char i=0;i<(three?3:1);i++)
 		{
+			//this is for test purposes only
+			if(i==0)
+				wsk->karta.chosen=1;
+			else
+				wsk->karta.chosen=0;
+				
 			tmp=describe(&(wsk->karta),wsk->karta.chosen);
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
@@ -107,7 +113,7 @@ void show_cards(card_list *const waste, card *const tableau, card *const foundat
 		fprintf(stdout,"XX");
 	}
 	
-	//Wypisz zawartość stosików:
+	//show tableau
 	for(unsigned char j=0;j<7;j++)
 	{
 		fprintf(stdout,"\nSTOSIK %i:  ",j+1);
@@ -119,7 +125,7 @@ void show_cards(card_list *const waste, card *const tableau, card *const foundat
 		}
 	}
 	
-	//Wypisz zawartość komórek:
+	//show foundation:
 	for(unsigned char j=0;j<4;j++)
 	{
 		fprintf(stdout,"\nKOMÓRKA %i: ",j+1);
@@ -130,7 +136,7 @@ void show_cards(card_list *const waste, card *const tableau, card *const foundat
 			free(tmp);
 		}
 	}
-	//Tells score
+	//tell score
 	fprintf(stdout,"\nWYNIK:      %i punktów\n",wynik);
 }
 
