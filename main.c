@@ -13,6 +13,7 @@ int main(void)
 	int score;
 	unsigned rounds=0;
 	unsigned char decision;
+	unsigned char tmp8bit=0;
 	
 	if (!setlocale(LC_CTYPE, "")) 
 	{
@@ -54,7 +55,10 @@ int main(void)
 			switch(decision)
 			{
 				case 1:
-					if(may_add_to_tableau(&(waste->karta), tableau, 0))
+					tmp8bit=choose_tableau();
+					if(tmp8bit==0)
+						break;
+					if(may_add_to_tableau(&(waste->karta), tableau, tmp8bit-1))
 						fprintf(stdout,"true\n");
 					else
 						fprintf(stdout,"false\n");

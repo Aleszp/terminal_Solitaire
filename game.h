@@ -12,5 +12,6 @@ void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const 
 void settings(bool *three, bool *game);
 card remove_from_waste(card_list *waste);
 bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char tableau_id);
+unsigned char choose_tableau();
 
 #endif

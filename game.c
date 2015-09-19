@@ -295,3 +295,18 @@ bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char ta
 	}
 	return true;
 }
+
+unsigned char choose_tableau()
+{
+	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
+	fprintf(stdout,"Który stosik?\nWYBÓR: ");
+	scanf("%1s", tmp);
+	if(!strcmp(tmp,"1"))return 1;
+	if(!strcmp(tmp,"2"))return 2;
+	if(!strcmp(tmp,"3"))return 3;
+	if(!strcmp(tmp,"4"))return 4;
+	if(!strcmp(tmp,"5"))return 5;
+	if(!strcmp(tmp,"6"))return 6;
+	if(!strcmp(tmp,"7"))return 7;
+	return 0;
+}
