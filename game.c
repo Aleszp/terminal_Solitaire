@@ -207,22 +207,22 @@ void settings(bool *three, bool *game)
 	}
 }
 
-card remove_from_waste(card_list *waste)
+card *remove_from_waste(card_list *waste)
 {
-	card tmp;
+	card *tmp=malloc(sizeof(card));
 	card_list *pointer=waste;
 	if(waste==NULL) //is waste empty?
 	{
 		//generate dummy card
-		tmp.id=0;
-		tmp.visible=true;
-		tmp.chosen=false;
+		tmp->id=0;
+		tmp->visible=true;
+		tmp->chosen=false;
 	}
 	else
 	{	
-		tmp.id=pointer->karta.id;
-		tmp.visible=true;
-		tmp.chosen=false;
+		tmp->id=pointer->karta.id;
+		tmp->visible=true;
+		tmp->chosen=false;
 		waste=waste->prev;
 		
 		//free memory
@@ -239,7 +239,7 @@ bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char ta
 	//is there even any card to move?
 	if(karta==NULL||karta->id==0)
 	{
-		fprintf(stdout,"no card\n");
+		fprintf(stdout,"Brak karty do przełożenia\n");
 		return false;
 	}
 	
@@ -254,7 +254,7 @@ bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char ta
 			return true;
 		else
 		{
-			fprintf(stdout,"king on not empty\n");
+			fprintf(stdout,"Króla można położyć wyłącznie na pustym polu.\n");
 			return false;
 		}
 	}
@@ -266,31 +266,31 @@ bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char ta
 	//is this card visible?
 	if(!tmp->visible)
 	{
-		fprintf(stdout,"can't place on ??\n");
+		fprintf(stdout,"Nie można położyć na nieznanej karcie.\n");
 		return false;
 	}
 	//do we want to put anything on ace?
 	if(card_value(tmp)==ACE)
 	{
-		fprintf(stdout,"can't place on ace\n");
+		fprintf(stdout,"Żadnej karty nie można położyć na asie.\n");
 		return false;
 	}
-	//are we trying to put on king anything but queen?
+	//are we trying to put on king something else than queen?
 	if(card_value(tmp)==KING&&card_value(karta)!=QUEEN)
 	{
-		fprintf(stdout,"only queen can be on king\n");
+		fprintf(stdout,"Kartę można położyć tylko na karcie z wartością o jeden większą.\n");
 		return false;
 	}
-	//are we trying tu put card with number not being ONE lower than card on which we put it?
-	if((card_value(tmp)-1)!=card_value(karta))
+	//are we trying tu put card with number not being ONE lower than card on which we put it? 
+	if(((card_value(tmp)-1)!=card_value(karta))||(card_value(tmp)==KING&&card_value(karta)!=QUEEN))
 	{
-		fprintf(stdout,"card can't be placed on other than with value raised by one, difference is: %i\n",card_value(tmp)-card_value(karta));
+		fprintf(stdout,"Kartę można położyć tylko na karcie z wartością o jeden większą.\n");
 		return false;
 	}
 	//are colors the same (both red or both black)?
 	if(card_color(tmp)%2==card_color(karta)%2)
 	{
-		fprintf(stdout,"wrong color\n");
+		fprintf(stdout,"Kartę można położyć tylko, jeśli mają różne kolory.\n");
 		return false;
 	}
 	return true;
@@ -309,4 +309,16 @@ unsigned char choose_tableau()
 	if(!strcmp(tmp,"6"))return 6;
 	if(!strcmp(tmp,"7"))return 7;
 	return 0;
+}
+
+void add_to_tableau(card *const karta, card *const tableau, unsigned char tableau_id)
+{
+	//prepare temporaty pointer
+	card *tmp=tableau+20*tableau_id;
+	//move pointer to top card
+	while(((tmp)->id!=0)&&(tmp-(tableau+20*tableau_id)<20)) //if tebleau is full also deny
+		tmp++;
+	tmp->id=karta->id;	//copy card value
+	tmp->visible=1;		//make visible
+	tmp->chosen=0;		//it's not chosen
 }

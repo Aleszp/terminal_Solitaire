@@ -59,9 +59,11 @@ int main(void)
 					if(tmp8bit==0)
 						break;
 					if(may_add_to_tableau(&(waste->karta), tableau, tmp8bit-1))
-						fprintf(stdout,"true\n");
-					else
-						fprintf(stdout,"false\n");
+					{
+						card *tmp=remove_from_waste(waste);
+						add_to_tableau(tmp, tableau, tmp8bit-1);
+						free(tmp);
+					}
 				break;
 				case 2:
 					deal_next(&waste, waste_begin, &rounds, &score,three); //deal next cards?
