@@ -10,8 +10,6 @@
 #include <wchar.h>
 #include <locale.h>
 
-
-
 typedef struct
 {
 	unsigned char id:6;
@@ -19,7 +17,6 @@ typedef struct
 	bool chosen		:1;
 }
 card;
-
 
 typedef struct card_list
 {

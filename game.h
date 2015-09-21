@@ -6,6 +6,7 @@
 wchar_t *describe(card *const karta, bool wybrana);
 unsigned char card_value(card *const karta);
 unsigned char card_color(card *const karta);
+wchar_t card_sign(unsigned char color);
 void show_cards(card_list *const waste, card *const tableau, card *const foundation, unsigned wynik, bool three);
 unsigned char decide();
 void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rozdania, int *const score, bool three);

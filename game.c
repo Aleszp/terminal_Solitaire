@@ -27,24 +27,7 @@ wchar_t *describe(card *const karta, bool wybrana)
 		return opis;
 	
 	//1 - Ace, 11 -Jack, 12 - Queen, 0 - King
-	
-	switch(card_color(karta)) //♥♣♦♠
-	{
-		case HEARTS:
-			opis[1]=L'\u2665';
-		break;
-		case CLUBS:
-			opis[1]=L'\u2663';
-		break;
-		case DIAMONDS:
-			opis[1]=L'\u2666';
-		break;
-		case SPADES:
-			opis[1]=L'\u2660';
-		break;
-		default:
-			opis[1]=L'!';
-	}
+	opis[1]=card_sign(card_color(karta));
 	
 	switch (card_value(karta)) //checks card value
 	{
@@ -77,6 +60,28 @@ unsigned char card_value(card *const karta)
 unsigned char card_color(card *const karta)
 {
 	return ((karta->id%13)==0?(karta->id)/13-1:((karta->id)-(karta->id)%13))/13;
+}
+wchar_t card_sign(unsigned char color)
+{
+	wchar_t tmp=L'!';
+	switch(color) //♥♣♦♠
+	{
+		case HEARTS:
+			tmp=L'\u2665';
+		break;
+		case CLUBS:
+			tmp=L'\u2663';
+		break;
+		case DIAMONDS:
+			tmp=L'\u2666';
+		break;
+		case SPADES:
+			tmp=L'\u2660';
+		break;
+		default:
+			tmp=L'!';
+	}
+	return tmp;
 }
 
 //shows cards
@@ -128,7 +133,7 @@ void show_cards(card_list *const waste, card *const tableau, card *const foundat
 	//show foundation:
 	for(unsigned char j=0;j<4;j++)
 	{
-		fprintf(stdout,"\nKOMÓRKA %i: ",j+1);
+		fprintf(stdout,"\nKOMÓRKA %lc: ",card_sign(j));
 		for(unsigned char k=0;k<13;k++)
 		{
 			tmp=describe(&(foundation[13*j+k]),0);
@@ -321,4 +326,9 @@ void add_to_tableau(card *const karta, card *const tableau, unsigned char tablea
 	tmp->id=karta->id;	//copy card value
 	tmp->visible=1;		//make visible
 	tmp->chosen=0;		//it's not chosen
+}
+bool may_add_to_foundation(card *const karta, card *const foundation)
+{
+	
+	return true;
 }
