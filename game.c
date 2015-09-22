@@ -150,13 +150,14 @@ unsigned char decide()
 {
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	
-	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - nowe rozdanie, 4 - opcje, 5 - koniec gry\nWYBÓR: ");
+	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - połóż kartę na stos, 4 - nowe rozdanie, 5 - opcje, 6 - koniec gry\nWYBÓR: ");
 	scanf("%1s", tmp);
 	if(!strcmp(tmp,"1"))return 1;
 	if(!strcmp(tmp,"2"))return 2;
 	if(!strcmp(tmp,"3"))return 3;
 	if(!strcmp(tmp,"4"))return 4;
 	if(!strcmp(tmp,"5"))return 5;
+	if(!strcmp(tmp,"6"))return 6;
 	return 0;
 }
 
@@ -331,7 +332,7 @@ void add_to_tableau(card *const karta, card *const tableau, unsigned char tablea
 bool may_add_to_foundation(card *const karta, card *const foundation)
 {
 	card *pointer=foundation+karta->id-1;
-	if(card_value(pointer-1)==0)
+	if(card_value(pointer-1)==0&&card_value(karta)!=1)
 		return false;
 	else
 		return true;

@@ -69,12 +69,20 @@ int main(void)
 					deal_next(&waste, waste_begin, &rounds, &score,three); //deal next cards?
 				break;
 				case 3:
-					game=false; //new game?
+					if(may_add_to_foundation(&(waste->karta), foundation))
+					{
+						card *tmp=remove_from_waste(waste);
+						add_to_foundation(tmp, foundation);
+						free(tmp);
+					}
 				break;
 				case 4:
-					settings(&three, &game); //change settings?
+					game=false; //new game?
 				break;
 				case 5:
+					settings(&three, &game); //change settings?
+				break;
+				case 6:
 					play=false; //quit program?
 				break;
 				default:
