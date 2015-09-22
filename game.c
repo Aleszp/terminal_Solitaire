@@ -330,30 +330,22 @@ void add_to_tableau(card *const karta, card *const tableau, unsigned char tablea
 
 bool may_add_to_foundation(card *const karta, card *const foundation)
 {
-	card *pointer=foundation;
-	switch(card_color(karta)) //♥♣♦♠
-	{
-		case HEARTS:
-			pointer=foundation;
-		break;
-		case CLUBS:
-			pointer=foundation+13;
-		break;
-		case DIAMONDS:
-			pointer=foundation+2*13;
-		break;
-		case SPADES:
-			pointer=foundation+3*13;
-		break;
-	}
-	for(unsigned char i=0;i<12;i++)
-	{
-		if((pointer)->id!=0)
-			break;
-		pointer++;
-	}
-	if(card_value(pointer)>card_value(karta))
-		return true;
-	else
+	card *pointer=foundation+karta->id-1;
+	if(card_value(pointer-1)==0)
 		return false;
+	else
+		return true;
+}
+
+void add_to_foundation(card *const karta, card *const foundation)
+{
+	card *pointer=foundation+karta->id-1;
+	
+	pointer->id=karta->id;
+	pointer->visible=1;
+	pointer->chosen=0;
+	
+	karta->id=0;
+	karta->visible=1;
+	karta->chosen=0;
 }
