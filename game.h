@@ -20,4 +20,6 @@ void add_to_tableau(card *const karta, card *const tableau, unsigned char tablea
 
 bool may_add_to_foundation(card *const karta, card *const foundation);
 void add_to_foundation(card *const karta, card *const foundation);
+
+bool may_remove_from_tableau(card *const tableau, unsigned char tableau_id, unsigned char card_id);
 #endif

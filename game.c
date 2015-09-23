@@ -350,3 +350,20 @@ void add_to_foundation(card *const karta, card *const foundation)
 	karta->visible=1;
 	karta->chosen=0;
 }
+
+bool may_remove_from_tableau(card *const tableau, unsigned char tableau_id, unsigned char card_id)
+{
+	card *pointer=tableau+20*tableau_id+card_id;
+	for(unsigned char i=0;i<20;i++)
+	{
+		if(card_value(pointer+1)==0||i==20)	//nothing above/end of tableau?
+			break;
+		if(card_value(pointer)-card_value(pointer+1)!=1)	//if card above value isn't a one smaller -> can't move
+			return false;
+		if(card_color(pointer)%2-card_color(pointer+1)%2==0)	//if card colors doesn't differ -> can't move
+			return false;
+		pointer++;
+	}
+	
+	return true;
+}
