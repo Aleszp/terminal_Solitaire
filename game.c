@@ -367,3 +367,25 @@ bool may_remove_from_tableau(card *const tableau, unsigned char tableau_id, unsi
 	
 	return true;
 }
+
+void move_many_in_tableau(card *const tableau, unsigned char tableau1_id, unsigned char tableau2_id, unsigned char card_id)
+{
+	card *from=tableau+20*tableau1_id+card_id;
+	card *to=tableau+20*tableau2_id+card_id;
+	
+	card *tmp_from=tableau+20*tableau1_id+20;
+	card *tmp_to=tableau+20*tableau2_id+20;
+	
+	while(to->id!=0&&to!=tmp_to)
+		to++;
+	while(from->id!=0&&from!=tmp_from&&to!=tmp_to)
+	{
+		to->id=from->id;
+		from->id=0;
+		to->visible=1;
+		to->chosen=0;
+		from->chosen=0;
+		to++;
+		from++;
+	}
+}
