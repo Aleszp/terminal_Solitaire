@@ -150,7 +150,7 @@ unsigned char decide()
 {
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	
-	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - połóż kartę na stos, 4 - nowe rozdanie, 5 - opcje, 6 - koniec gry\nWYBÓR: ");
+	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - karta do komórki, 4 - nowe rozdanie, 5 - opcje, 6 - koniec gry\nWYBÓR: ");
 	scanf("%1s", tmp);
 	if(!strcmp(tmp,"1"))return 1;
 	if(!strcmp(tmp,"2"))return 2;
@@ -288,7 +288,7 @@ bool may_add_to_tableau(card *const karta, card *const tableau, unsigned char ta
 		return false;
 	}
 	//are we trying tu put card with number not being ONE lower than card on which we put it? 
-	if(((card_value(tmp)-1)!=card_value(karta))||(card_value(tmp)==KING&&card_value(karta)!=QUEEN))
+	if(((card_value(tmp)-1)!=card_value(karta))&&(card_value(tmp)!=KING&&card_value(karta)!=QUEEN))
 	{
 		fprintf(stdout,"Kartę można położyć tylko na karcie z wartością o jeden większą.\n");
 		return false;
@@ -316,6 +316,7 @@ unsigned char choose_tableau()
 	if(!strcmp(tmp,"7"))return 7;
 	return 0;
 }
+
 
 void add_to_tableau(card *const karta, card *const tableau, unsigned char tableau_id)
 {
@@ -351,7 +352,7 @@ void add_to_foundation(card *const karta, card *const foundation)
 	karta->chosen=0;
 }
 
-bool may_remove_from_tableau(card *const tableau, unsigned char tableau_id, unsigned char card_id)
+bool may_remove_many_from_tableau(card *const tableau, unsigned char tableau_id, unsigned char card_id)
 {
 	card *pointer=tableau+20*tableau_id+card_id;
 	for(unsigned char i=0;i<20;i++)
@@ -366,6 +367,44 @@ bool may_remove_from_tableau(card *const tableau, unsigned char tableau_id, unsi
 	}
 	
 	return true;
+}
+
+card remove_many_from_tableau(card *const tableau, unsigned char tableau_id, bool remove)
+{
+	card tmp;
+	card *pointer=tableau+20*tableau_id;
+	for(unsigned char i=0;i<20;i++)
+	{
+		if(card_value(pointer+1)==0||i==20)	//nothing above/end of tableau?
+			break;
+		pointer++;
+	}
+	tmp.id=pointer->id;
+	tmp.chosen=0;
+	tmp.visible=1;
+	if(remove)
+	{
+		pointer->id=0;
+		pointer->chosen=0;
+		pointer->visible=1;
+	}
+	return tmp;
+}
+
+unsigned char where_from()
+{
+	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
+	fprintf(stdout,"Skąd? \nOPCJE DO WYBORU: 0 - talia , 1 - 7 - stosik o danym numerze\nWYBÓR: ");
+	scanf("%1s", tmp);
+	if(!strcmp(tmp,"0"))return 0;
+	if(!strcmp(tmp,"1"))return 1;
+	if(!strcmp(tmp,"2"))return 2;
+	if(!strcmp(tmp,"3"))return 3;
+	if(!strcmp(tmp,"4"))return 4;
+	if(!strcmp(tmp,"5"))return 5;
+	if(!strcmp(tmp,"6"))return 6;
+	if(!strcmp(tmp,"7"))return 7;
+	return 10;
 }
 
 void move_many_in_tableau(card *const tableau, unsigned char tableau1_id, unsigned char tableau2_id, unsigned char card_id)

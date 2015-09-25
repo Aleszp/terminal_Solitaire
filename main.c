@@ -14,6 +14,7 @@ int main(void)
 	unsigned rounds=0;
 	unsigned char decision;
 	unsigned char tmp8bit=0;
+	card tmp_card;
 	
 	if (!setlocale(LC_CTYPE, "")) 
 	{
@@ -69,11 +70,27 @@ int main(void)
 					deal_next(&waste, waste_begin, &rounds, &score,three); //deal next cards?
 				break;
 				case 3:
-					if(may_add_to_foundation(&(waste->karta), foundation))
+					tmp8bit=where_from();
+					if(!tmp8bit)
 					{
-						card *tmp=remove_from_waste(waste);
-						add_to_foundation(tmp, foundation);
-						free(tmp);
+						if(may_add_to_foundation(&(waste->karta), foundation))
+						{
+							card *tmp=remove_from_waste(waste);
+							add_to_foundation(tmp, foundation);
+							free(tmp);
+						}
+					}
+					else
+					{
+						if(tmp8bit<10)
+						{
+							tmp_card=remove_many_from_tableau(tableau, tmp8bit, 0);
+							if(may_add_to_foundation(&tmp_card, foundation))
+							{
+								tmp_card=remove_many_from_tableau(tableau, tmp8bit, 1);
+								add_to_foundation(&tmp_card, foundation);
+							}
+						}
 					}
 				break;
 				case 4:
