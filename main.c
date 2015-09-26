@@ -71,7 +71,7 @@ int main(void)
 				break;
 				case 3:
 					tmp8bit=where_from();
-					if(!tmp8bit)
+					if(tmp8bit==0)
 					{
 						if(may_add_to_foundation(&(waste->karta), foundation))
 						{
@@ -84,10 +84,10 @@ int main(void)
 					{
 						if(tmp8bit<10)
 						{
-							tmp_card=remove_many_from_tableau(tableau, tmp8bit, 0);
+							tmp_card=remove_many_from_tableau(tableau, tmp8bit-1, 0);
 							if(may_add_to_foundation(&tmp_card, foundation))
 							{
-								tmp_card=remove_many_from_tableau(tableau, tmp8bit, 1);
+								tmp_card=remove_many_from_tableau(tableau, tmp8bit-1, 1);
 								add_to_foundation(&tmp_card, foundation);
 							}
 						}

@@ -157,7 +157,7 @@ unsigned char decide()
 	if(!strcmp(tmp,"3"))return 3;
 	if(!strcmp(tmp,"4"))return 4;
 	if(!strcmp(tmp,"5"))return 5;
-	if(!strcmp(tmp,"6"))return 6;
+	if(!(strcmp(tmp,"6")&&strcmp(tmp,"q")&&strcmp(tmp,"Q")))return 6;
 	return 0;
 }
 
@@ -387,6 +387,7 @@ card remove_many_from_tableau(card *const tableau, unsigned char tableau_id, boo
 		pointer->id=0;
 		pointer->chosen=0;
 		pointer->visible=1;
+		(pointer-1)->visible=1;
 	}
 	return tmp;
 }
