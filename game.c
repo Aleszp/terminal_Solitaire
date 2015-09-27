@@ -85,30 +85,29 @@ wchar_t card_sign(unsigned char color)
 }
 
 //shows cards
-void show_cards(card_list *const waste, card *const tableau, card *const foundation, unsigned wynik, bool three)
+void show_cards(card_list *const waste, card_list *waste_end, card *const tableau, card *const foundation, unsigned wynik, bool three)
 {
 	fprintf(stdout,"TALIA:     ");
 	
 	wchar_t *tmp;
 	card_list *wsk=waste;
 	
+	//show waste
 	if(waste!=NULL)
 	{
 		//show three/one card from waste
 		for(unsigned char i=0;i<(three?3:1);i++)
 		{
-			//this is for test purposes only
-			if(i==0)
-				wsk->karta.chosen=1;
-			else
+			if(wsk==waste_end)
+			{
 				wsk->karta.chosen=0;
-				
+			}
 			tmp=describe(&(wsk->karta),wsk->karta.chosen);
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 			
-			if(wsk->prev!=NULL)
-				wsk=wsk->prev;
+			if((wsk->next!=NULL))
+				wsk=wsk->next;
 			else
 				break;
 		}
@@ -161,39 +160,58 @@ unsigned char decide()
 	return 0;
 }
 
-void deal_next(card_list **waste, card_list *const waste_begin, unsigned *const rounds, int *const score, bool three)
+void deal_next(card_list **waste, card_list **waste_end,card_list *const waste_begin, unsigned *const rounds, int *const score, bool three)
 {
 	card_list *tmp=*waste;
+	
 	if(tmp==NULL)
 	{
 		tmp=waste_begin;
-		if(three)
-			for(unsigned char i=0;i<2;i++)
-			{	
-				if(tmp->next==NULL)
-					break;
-				tmp=tmp->next;
-			}
 		(*rounds)++;
 		if(*rounds>(three?3:1))
 			*score-=(three?20:100);
+		*waste=tmp;
+		refresh_waste_pointer(waste, waste_end, three);
+		
+		return;
 	}
+	
+	if((*waste_end)->next==NULL)
+	{
+		*waste=NULL;
+		*waste_end=NULL;
+		return;
+	}
+	
+	if(tmp->next==NULL)
+		tmp=NULL;
 	else
 	{	
-		if(tmp->next==NULL)
-			tmp=NULL;
-		else
-		{	
-			for(unsigned char i=0;i<(three?3:1);i++)
-			{
-				if(tmp->next==NULL)
-					break;
-				tmp=tmp->next;
-			}
+		for(unsigned char i=0;i<(three?3:1);i++)
+		{
+			if(tmp->next==NULL)
+				break;
+			tmp=tmp->next;
 		}
 	}
-	*waste=tmp;
+	*waste=tmp;	
+	refresh_waste_pointer(waste, waste_end, three);
 }
+
+void refresh_waste_pointer(card_list **waste, card_list **waste_end, bool three)
+{
+	*waste_end=*waste;
+	if(!three)
+		return;
+	for(unsigned char i=0;i<2;i++)
+	{
+		if((*waste_end)->next!=NULL)
+			*waste_end=(*waste_end)->next;
+		else
+			return;
+	}
+}
+
 
 //Lets user change settings
 void settings(bool *three, bool *game)
@@ -233,6 +251,7 @@ card *remove_from_waste(card_list *waste)
 		
 		//free memory
 		waste->next=pointer->next;
+		waste->karta.chosen=1;
 		free(pointer);
 		pointer=waste->next;
 		pointer->prev=waste;

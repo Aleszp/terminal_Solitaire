@@ -8,6 +8,7 @@ int main(void)
 	bool three=true; //if true than cards will be dealt in groups of three, otherwise one at a time
 	card_list* waste_begin=create_waste();
 	card_list* waste;
+	card_list* waste_end;
 	card tableau[140];
 	card foundation[52];
 	int score;
@@ -15,6 +16,7 @@ int main(void)
 	unsigned char decision;
 	unsigned char tmp8bit=0;
 	card tmp_card;
+	wchar_t *tmp_char;
 	
 	if (!setlocale(LC_CTYPE, "")) 
 	{
@@ -43,6 +45,7 @@ int main(void)
 		score=0;
 		rounds=0;
 		waste=waste_begin;
+		refresh_waste_pointer(&waste, &waste_end, three);
 		game=true;
 
 		deal(waste_begin, &waste, tableau);
@@ -50,7 +53,7 @@ int main(void)
 		//in this loop UI shows and player makes decisions
 		do
 		{
-			show_cards(waste, tableau, foundation, score, three);
+			show_cards(waste, waste_end, tableau, foundation, score, three);
 			decision=decide(); //let player decide what to do
 			
 			switch(decision)
@@ -59,23 +62,27 @@ int main(void)
 					tmp8bit=choose_tableau();
 					if(tmp8bit==0)
 						break;
-					if(may_add_to_tableau(&(waste->karta), tableau, tmp8bit-1))
+					if(may_add_to_tableau(&(waste_end->karta), tableau, tmp8bit-1))
 					{
-						card *tmp=remove_from_waste(waste);
+						card *tmp=remove_from_waste(waste_end);
 						add_to_tableau(tmp, tableau, tmp8bit-1);
 						free(tmp);
 					}
 				break;
 				case 2:
-					deal_next(&waste, waste_begin, &rounds, &score,three); //deal next cards?
+					deal_next(&waste, &waste_end, waste_begin, &rounds, &score, three); //deal next cards?
 				break;
 				case 3:
 					tmp8bit=where_from();
 					if(tmp8bit==0)
 					{
-						if(may_add_to_foundation(&(waste->karta), foundation))
+						tmp_char=describe(&(waste_end->karta),waste_end->karta.chosen);
+						fprintf(stdout,"**%ls**",tmp_char);
+						free(tmp_char);
+						
+						if(may_add_to_foundation(&(waste_end->karta), foundation))
 						{
-							card *tmp=remove_from_waste(waste);
+							card *tmp=remove_from_waste(waste_end);
 							add_to_foundation(tmp, foundation);
 							free(tmp);
 						}
