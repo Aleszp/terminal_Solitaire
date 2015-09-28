@@ -100,7 +100,7 @@ void show_cards(card_list *const waste, card_list *waste_end, card *const tablea
 		{
 			if(wsk==waste_end)
 			{
-				wsk->karta.chosen=0;
+				wsk->karta.chosen=1;
 			}
 			tmp=describe(&(wsk->karta),wsk->karta.chosen);
 			fprintf(stdout,"%ls",tmp);
@@ -200,13 +200,17 @@ void deal_next(card_list **waste, card_list **waste_end,card_list *const waste_b
 
 void refresh_waste_pointer(card_list **waste, card_list **waste_end, bool three)
 {
-	*waste_end=*waste;
+	(*waste_end)=(*waste);
+	if(*waste_end==NULL)
+		return;
 	if(!three)
 		return;
 	for(unsigned char i=0;i<2;i++)
 	{
 		if((*waste_end)->next!=NULL)
-			*waste_end=(*waste_end)->next;
+		{
+			(*waste_end)=(*waste_end)->next;
+		}
 		else
 			return;
 	}
@@ -231,10 +235,10 @@ void settings(bool *three, bool *game)
 	}
 }
 
-card *remove_from_waste(card_list *waste)
+card *remove_from_waste(card_list **waste)
 {
 	card *tmp=malloc(sizeof(card));
-	card_list *pointer=waste;
+	card_list *pointer=*waste;
 	if(waste==NULL) //is waste empty?
 	{
 		//generate dummy card
@@ -247,14 +251,14 @@ card *remove_from_waste(card_list *waste)
 		tmp->id=pointer->karta.id;
 		tmp->visible=true;
 		tmp->chosen=false;
-		waste=waste->prev;
+		(*waste)=(*waste)->prev;
 		
 		//free memory
-		waste->next=pointer->next;
-		waste->karta.chosen=1;
+		(*waste)->next=pointer->next;
+		(*waste)->karta.chosen=0;
 		free(pointer);
-		pointer=waste->next;
-		pointer->prev=waste;
+		pointer=(*waste)->next;
+		pointer->prev=(*waste);
 	}
 	return tmp;
 }
