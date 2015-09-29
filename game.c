@@ -90,13 +90,12 @@ void show_cards(card_list *const waste, card_list *waste_end, card *const tablea
 	fprintf(stdout,"TALIA:     ");
 	
 	wchar_t *tmp;
-	card_list *wsk=waste;
 	
 	//show waste
 	if(waste!=NULL)
 	{
 		//show three/one card from waste
-		for(unsigned char i=0;i<(three?3:1);i++)
+		for(card_list *wsk=waste;wsk!=waste_end->next;wsk=wsk->next)
 		{
 			if(wsk==waste_end)
 			{
@@ -106,10 +105,10 @@ void show_cards(card_list *const waste, card_list *waste_end, card *const tablea
 			fprintf(stdout,"%ls",tmp);
 			free(tmp);
 			
-			if((wsk->next!=NULL))
+			/*if((wsk->next!=NULL))
 				wsk=wsk->next;
 			else
-				break;
+				break;*/
 		}
 	}
 	else
@@ -198,14 +197,14 @@ void deal_next(card_list **waste, card_list **waste_end,card_list *const waste_b
 	refresh_waste_pointer(waste, waste_end, three);
 }
 
-void refresh_waste_pointer(card_list **waste, card_list **waste_end, bool three)
+void refresh_waste_pointer(card_list **waste, card_list **waste_end, unsigned char many)
 {
 	(*waste_end)=(*waste);
 	if(*waste_end==NULL)
 		return;
-	if(!three)
+	if(many<2)
 		return;
-	for(unsigned char i=0;i<2;i++)
+	for(unsigned char i=0;i<many-1;i++)
 	{
 		if((*waste_end)->next!=NULL)
 		{

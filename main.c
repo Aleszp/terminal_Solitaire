@@ -17,6 +17,7 @@ int main(void)
 	unsigned char tmp8bit=0;
 	card tmp_card;
 	wchar_t *tmp_char;
+	unsigned char visible_waste_cards=(three?3:0);
 	
 	if (!setlocale(LC_CTYPE, "")) 
 	{
@@ -46,13 +47,13 @@ int main(void)
 		rounds=0;
 		waste=waste_begin;
 		game=true;
-		//refresh_waste_pointer(&waste, &waste_end, three);
+		refresh_waste_pointer(&waste, &waste_end, visible_waste_cards);
 		deal(waste_begin, &waste, tableau);
 		
 		//in this loop UI shows and player makes decisions
 		do
 		{
-			refresh_waste_pointer(&waste, &waste_end, three);
+			refresh_waste_pointer(&waste, &waste_end, visible_waste_cards);
 			show_cards(waste, waste_end, tableau, foundation, score, three);
 			decision=decide(); //let player decide what to do
 			
@@ -65,11 +66,13 @@ int main(void)
 					if(may_add_to_tableau(&(waste_end->karta), tableau, tmp8bit-1))
 					{
 						card *tmp=remove_from_waste(&waste_end);
+						visible_waste_cards--;
 						add_to_tableau(tmp, tableau, tmp8bit-1);
 						free(tmp);
 					}
 				break;
 				case 2:
+					visible_waste_cards=(three?3:0);
 					deal_next(&waste, &waste_end, waste_begin, &rounds, &score, three); //deal next cards?
 				break;
 				case 3:
@@ -83,6 +86,7 @@ int main(void)
 						if(may_add_to_foundation(&(waste_end->karta), foundation))
 						{
 							card *tmp=remove_from_waste(&waste_end);
+							visible_waste_cards--;
 							add_to_foundation(tmp, foundation);
 							free(tmp);
 						}
