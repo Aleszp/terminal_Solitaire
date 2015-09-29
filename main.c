@@ -17,7 +17,7 @@ int main(void)
 	unsigned char tmp8bit=0;
 	card tmp_card;
 	wchar_t *tmp_char;
-	unsigned char visible_waste_cards=(three?3:0);
+	unsigned char visible_waste_cards=(three?3:1);
 	
 	if (!setlocale(LC_CTYPE, "")) 
 	{
@@ -53,6 +53,11 @@ int main(void)
 		//in this loop UI shows and player makes decisions
 		do
 		{
+			if(visible_waste_cards==0)
+			{
+				visible_waste_cards=1;
+				waste=waste->prev;
+			}
 			refresh_waste_pointer(&waste, &waste_end, visible_waste_cards);
 			show_cards(waste, waste_end, tableau, foundation, score, three);
 			decision=decide(); //let player decide what to do
@@ -72,7 +77,7 @@ int main(void)
 					}
 				break;
 				case 2:
-					visible_waste_cards=(three?3:0);
+					visible_waste_cards=(three?3:1);
 					deal_next(&waste, &waste_end, waste_begin, &rounds, &score, three); //deal next cards?
 				break;
 				case 3:
