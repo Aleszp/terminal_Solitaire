@@ -59,7 +59,7 @@ unsigned char card_value(card *const karta)
 }
 unsigned char card_color(card *const karta)
 {
-	return ((karta->id%13)==0?(karta->id)/13-1:((karta->id)-(karta->id)%13))/13;
+	return ((karta->id%13)==0?(((karta->id)/13)-1):(((karta->id)-(karta->id)%13))/13);
 }
 wchar_t card_sign(unsigned char color)
 {
