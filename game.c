@@ -148,14 +148,15 @@ unsigned char decide()
 {
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	
-	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - karta do komórki, 4 - nowe rozdanie, 5 - opcje, 6 - koniec gry\nWYBÓR: ");
-	scanf("%1s", tmp);
+	fprintf(stdout,"OPCJE DO WYBORU: 1 - przełóż kartę , 2 - rozdaj kolejne karty, 3 - karta do komórki, 4 - przełóż między stosikami, 5 - nowe rozdanie, 6 - opcje, 7 - koniec gry\nWYBÓR: ");
+	scanf("%s", tmp);
 	if(!strcmp(tmp,"1"))return 1;
 	if(!strcmp(tmp,"2"))return 2;
 	if(!strcmp(tmp,"3"))return 3;
 	if(!strcmp(tmp,"4"))return 4;
 	if(!strcmp(tmp,"5"))return 5;
 	if(!(strcmp(tmp,"6")&&strcmp(tmp,"q")&&strcmp(tmp,"Q")))return 6;
+	if(!strcmp(tmp,"7"))return 7;
 	return 0;
 }
 
@@ -219,7 +220,7 @@ void refresh_waste_pointer(card_list **waste, card_list **waste_end, unsigned ch
 //Lets user change settings
 void settings(bool *three, bool *game)
 {
-	fprintf(stdout, "Aby rozdawać po jednej karcie wybierz 1, apy po trzy 3, dowolny inny wybór - bez zmian. \nZmiana trybu gry powoduje rozpoczęcie nowego rounds.\nWYBOR:");
+	fprintf(stdout, "Aby rozdawać po jednej karcie wybierz 1, apy po trzy 3, dowolny inny wybór - bez zmian. \nZmiana trybu gry powoduje rozpoczęcie nowego rozdania.\nWYBOR:");
 	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
 	scanf("%1s", tmp);
 	if(!strcmp(tmp,"1"))
@@ -414,11 +415,11 @@ card remove_many_from_tableau(card *const tableau, unsigned char tableau_id, boo
 	return tmp;
 }
 
-unsigned char where_from()
+unsigned char where_from(char* text)
 {
-	char tmp[2]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
-	fprintf(stdout,"Skąd? \nOPCJE DO WYBORU: 0 - talia , 1 - 7 - stosik o danym numerze\nWYBÓR: ");
-	scanf("%1s", tmp);
+	char tmp[3]; //two-sign buffer, could have read only integers, but this way is more idiot-proof
+	fprintf(stdout,"%s", text);
+	scanf("%s", tmp);
 	if(!strcmp(tmp,"0"))return 0;
 	if(!strcmp(tmp,"1"))return 1;
 	if(!strcmp(tmp,"2"))return 2;
@@ -427,7 +428,14 @@ unsigned char where_from()
 	if(!strcmp(tmp,"5"))return 5;
 	if(!strcmp(tmp,"6"))return 6;
 	if(!strcmp(tmp,"7"))return 7;
-	return 10;
+	if(!strcmp(tmp,"8"))return 8;
+	if(!strcmp(tmp,"9"))return 9;
+	if(!strcmp(tmp,"10"))return 10;
+	if(!strcmp(tmp,"11"))return 11;
+	if(!strcmp(tmp,"12"))return 12;
+	if(!strcmp(tmp,"13"))return 13;
+	if(!strcmp(tmp,"14"))return 14;
+	return 200;
 }
 
 void move_many_in_tableau(card *const tableau, unsigned char tableau1_id, unsigned char tableau2_id, unsigned char card_id)

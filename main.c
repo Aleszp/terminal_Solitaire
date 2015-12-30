@@ -9,12 +9,15 @@ int main(void)
 	card_list* waste_begin=create_waste();
 	card_list* waste;
 	card_list* waste_end;
+	card tmp20[20];
 	card tableau[140];
 	card foundation[52];
 	int score;
 	unsigned rounds=0;
 	unsigned char decision;
 	unsigned char tmp8bit=0;
+	unsigned char tmp8bit2=0;
+	unsigned char tmp8bit3=0;
 	card tmp_card;
 	wchar_t *tmp_char;
 	unsigned char visible_waste_cards=(three?3:1);
@@ -81,7 +84,7 @@ int main(void)
 					deal_next(&waste, &waste_end, waste_begin, &rounds, &score, three); //deal next cards?
 				break;
 				case 3:
-					tmp8bit=where_from();
+					tmp8bit=where_from("Skąd? \nOPCJE DO WYBORU: 0 - talia , 1 - 7 - stosik o danym numerze\nWYBÓR: ");
 					if(tmp8bit==0)
 					{
 						tmp_char=describe(&(waste_end->karta),waste_end->karta.chosen);
@@ -98,7 +101,7 @@ int main(void)
 					}
 					else
 					{
-						if(tmp8bit<10)
+						if(tmp8bit<=7)
 						{
 							tmp_card=remove_many_from_tableau(tableau, tmp8bit-1, 0);
 							if(may_add_to_foundation(&tmp_card, foundation))
@@ -107,15 +110,40 @@ int main(void)
 								add_to_foundation(&tmp_card, foundation);
 							}
 						}
+						else
+						{
+							fprintf(stdout,"Nieznane miejsce,\n");
+						}
 					}
 				break;
 				case 4:
-					game=false; //new game?
+					tmp8bit=where_from("Skąd? \nOPCJE DO WYBORU: 1 - 7 - stosik o danym numerze\nWYBÓR: ");
+					tmp8bit2=where_from("Dokąd? \nOPCJE DO WYBORU: 1 - 7 - stosik o danym numerze\nWYBÓR: ");
+					if(tmp8bit==tmp8bit2)
+						break;
+					if(tmp8bit<1||tmp8bit>7||tmp8bit2<1||tmp8bit2>7)
+					{
+						fprintf(stdout,"Pole spoza zakresu.\n");
+						break;
+					}
+					tmp8bit3=where_from("Ile kart? \nWYBÓR: ");
+					for(unsigned i=0;i<tmp8bit3;i++)
+					{
+						tmp_card=remove_many_from_tableau(tableau, tmp8bit-1, 0);
+						if(may_add_to_foundation(&tmp_card, foundation))
+						{
+							tmp_card=remove_many_from_tableau(tableau, tmp8bit-1, 1);
+							add_to_foundation(&tmp_card, foundation);
+						}
+					}
 				break;
 				case 5:
-					settings(&three, &game); //change settings?
+					game=false; //new game?
 				break;
 				case 6:
+					settings(&three, &game); //change settings?
+				break;
+				case 7:
 					play=false; //quit program?
 				break;
 				default:
