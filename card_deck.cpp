@@ -30,7 +30,13 @@ unsigned char card_deck::get_decision()
 
 card_deck::card_deck()
 {
+	foundation found_;
+	tableau table_;
+	waste wst_;
 	
+	found=found_;
+	table=table_;
+	wst=wst_;
 }
 
 card_deck::~card_deck()

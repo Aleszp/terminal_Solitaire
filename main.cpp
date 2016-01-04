@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-void print_version(void){cout<<"Pasjans konsolowy, autor: Aleksander Szpakiewicz-Szatan. \nWersja: C++pre-alfa1"<<endl;}
+void print_version(void){cout<<"Pasjans konsolowy, autor: Aleksander Szpakiewicz-Szatan. \nWersja: C++pre-alfa2"<<endl;}
 
 int main(void)
 {
@@ -16,6 +16,15 @@ int main(void)
 	bool game=true;
 	unsigned decision;
 	
+	card karta;
+	karta.visible=1;
+	for(unsigned char i=1;i<=52;i++)
+	{
+		karta.id=i;
+		cout<<karta.show_Card()<<endl;
+		
+	}
+		
 	while(playing)
 	{
 		game=true;
