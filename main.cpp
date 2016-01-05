@@ -18,10 +18,10 @@ int main(void)
 	
 	card karta;
 	karta.visible=1;
-	for(unsigned char i=1;i<=52;i++)
+	for(uint8_t i=1;i<=52;i++)
 	{
 		karta.id=i;
-		cout<<karta.show_Card()<<endl;
+		cout<<karta.show_card()<<endl;
 		
 	}
 		

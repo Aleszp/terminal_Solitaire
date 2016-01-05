@@ -1,46 +1,48 @@
 #include "card.hpp"
 #include "main.hpp"
 #include <string> 
+#include <cstdio> 
+#include <sstream>
 
 using namespace std;
 
-bool card::get_Color()
+bool card::get_color()
 {
-	if(get_Symbol()==HEARTS||get_Symbol()==DIAMONDS)
+	if(get_symbol()==HEARTS||get_symbol()==DIAMONDS)
 		return RED;
 	return BLACK;
 }
 
-unsigned char card::get_Number()
+uint8_t card::get_number()
 {
 	return id%13;
 }
 
-unsigned char card::get_Symbol()
+uint8_t card::get_symbol()
 {
 	//1-13 - ♥, 14-26 - ♣, 27-39 - ♦, 40-52 - ♠
-	return (id-get_Number())/13;
+	return id<52?(id-get_number())/13:SPADES;
 }
 
-string card::show_Card()
+string card::show_card()
 {
-	string desc("      ");
-	switch (get_Symbol())
+	string desc("        ");
+	switch (get_symbol())
 	{
 		case HEARTS:
-			desc=" ♥";
+			desc=" ♥"; //♥
 		break;
 		case CLUBS:
-			desc=" ♣";
+			desc=" ♣"; //♣
 		break;
 		case DIAMONDS:
-			desc=" ♦";
+			desc=" ♦"; //♦
 		break;
 		case SPADES:
-			desc=" ♠";
+			desc=" ♠"; //♠
 		break;
 	}
-	switch(get_Number())
+	switch(get_number())
 	{
 		case JACK:
 			desc+="J ";
@@ -52,7 +54,9 @@ string card::show_Card()
 			desc+="K ";
 		break;
 		default:
-			desc+=get_Number()+" ";
+			char tmp[4];
+			sprintf(tmp,"%u ",get_number());
+			desc+=tmp;
 	}
 	
 	return desc;
