@@ -26,7 +26,9 @@ uint8_t card::get_symbol()
 
 string card::show_card()
 {
-	string desc("        ");
+	string desc;
+	if(!visible)
+		return(" XX ");
 	switch (get_symbol())
 	{
 		case HEARTS:
@@ -60,4 +62,12 @@ string card::show_card()
 	}
 	
 	return desc;
+}
+
+card::card(uint8_t id_, bool visible_)
+{
+	id=id_;
+	visible=visible_;
+	above=NULL;
+	below=NULL;
 }

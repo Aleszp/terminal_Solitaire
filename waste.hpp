@@ -3,7 +3,15 @@
 
 class waste
 {
+	protected:
+		card *first;
+		card *current;
 	
+	public:
+		card *get_first()	{return first;}
+		card *get_current()	{return current;}
+	
+		
 };
 
 #endif

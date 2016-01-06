@@ -15,15 +15,6 @@ int main(void)
 	bool playing=true;
 	bool game=true;
 	unsigned decision;
-	
-	card karta;
-	karta.visible=1;
-	for(uint8_t i=1;i<=52;i++)
-	{
-		karta.id=i;
-		cout<<karta.show_card()<<endl;
-		
-	}
 		
 	while(playing)
 	{
