@@ -7,13 +7,14 @@
 
 #include <iostream>
 
-void print_version(void){cout<<"Pasjans konsolowy, autor: Aleksander Szpakiewicz-Szatan. \nWersja: C++pre-alfa2"<<endl;}
+void print_version(void){cout<<"Pasjans konsolowy, autor: Aleksander Szpakiewicz-Szatan. \nWersja: C++pre-alfa3"<<endl;}
 
 int main(void)
 {
 	card_deck deck;
 	bool playing=true;
 	bool game=true;
+	bool three=true; //rozdawać 3 czy 1 kartę?
 	unsigned decision;
 		
 	while(playing)
@@ -30,7 +31,7 @@ int main(void)
 					
 				break;
 				case NEXT_CARD:
-					
+					deck.next_card(three);
 				break;
 				
 				break;

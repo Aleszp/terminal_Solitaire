@@ -20,6 +20,7 @@ class card_deck
 		unsigned char get_decision();
 		card_deck();
 		~card_deck();
+		void next_card(bool three){wst.next(three);}
 	
 };
 

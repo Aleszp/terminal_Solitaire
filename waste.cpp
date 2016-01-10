@@ -15,8 +15,11 @@ card* waste::remove_current()
 
 void waste::next(bool three)
 {
-	if(current->below!=NULL)
-		current=current->below;
-	else
-		current=first;
+	for(uint8_t i=three?1:3;i>0;i++)
+	{
+		if(current->below!=NULL)
+			current=current->below;
+		else
+			current=first;
+	}
 }
