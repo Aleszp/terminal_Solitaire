@@ -3,8 +3,9 @@
 
 #include <iostream>
 
-void card_deck::show_cards()
+void card_deck::show_cards(bool three_)
 {
+	wst.show(three_);
 	
 }
 unsigned char card_deck::get_decision()

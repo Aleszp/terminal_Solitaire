@@ -16,7 +16,7 @@ class card_deck
 		waste wst;
 	
 	public:
-		void show_cards();
+		void show_cards(bool three_);
 		unsigned char get_decision();
 		card_deck();
 		~card_deck();

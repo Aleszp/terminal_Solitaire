@@ -71,3 +71,14 @@ card::card(uint8_t id_, bool visible_)
 	above=NULL;
 	below=NULL;
 }
+
+void card::show_line()
+{
+	card *tmp=this;
+	
+	while(tmp->below!=NULL)
+	{
+		cout<<(tmp->show_card());
+		tmp=tmp->below;
+	}
+}	

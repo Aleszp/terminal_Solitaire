@@ -23,7 +23,7 @@ int main(void)
 		cout<<"Rozpoczynam nowe rozdanie."<<endl;
 		while(game)
 		{
-			deck.show_cards();
+			deck.show_cards(three);
 			decision=deck.get_decision();
 			switch(decision)
 			{

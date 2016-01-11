@@ -19,6 +19,7 @@ class card
 		uint8_t get_symbol();
 		std::string show_card();
 		card(uint8_t id_=0, bool visible_=false);
+		void show_line();
 };
 
 #endif
