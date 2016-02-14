@@ -27,8 +27,14 @@ void waste::next(bool three_)
 		update_third_ptr();
 		return;
 	}
-	for(uint8_t i=three_?1:3;i>0;i++)
+	for(uint8_t i=three_?3:1;i>0;i--)
 	{
+		if(three_&&third==NULL)
+		{
+			current=NULL;
+			update_third_ptr();
+			return;
+		}
 		if(current->below!=NULL)
 			current=current->below;
 		else
@@ -71,4 +77,36 @@ void waste::update_third_ptr()
 		else
 			third=third->below;
 	}
+}
+
+void waste::add(card card_)
+{
+	if(first==NULL)
+	{
+		first=new card;
+		*first=card_;
+		current=first;
+	}
+	else
+	{
+		(current->below)=new card;
+		*(current->below)=card_;
+		(current->below)->above=current;
+		current=current->below;
+	}
+}
+
+waste::~waste()
+{/*
+	card *ptr=first;
+	while(ptr->below!=NULL)
+	{
+		cerr<<(unsigned)ptr->id<<endl;
+		ptr=ptr->below;
+		delete ptr->above;
+	}
+	if(ptr!=NULL)
+		delete ptr;
+	first=NULL;
+	current=first;*/
 }

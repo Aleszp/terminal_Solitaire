@@ -11,16 +11,23 @@ void print_version(void){cout<<"Pasjans konsolowy, autor: Aleksander Szpakiewicz
 
 int main(void)
 {
+	srand (time (NULL));
+	
 	card_deck deck;
 	bool playing=true;
 	bool game=true;
 	bool three=true; //rozdawać 3 czy 1 kartę?
 	unsigned decision;
-		
+	
 	while(playing)
 	{
 		game=true;
 		cout<<"Rozpoczynam nowe rozdanie."<<endl;
+		
+		deck.~card_deck();	//zwolnij pamięć
+		deck=card_deck();	//potasuj nowe karty
+		deck.reset_waste_current();
+		
 		while(game)
 		{
 			deck.show_cards(three);

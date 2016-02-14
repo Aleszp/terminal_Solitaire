@@ -21,6 +21,7 @@ class card_deck
 		card_deck();
 		~card_deck();
 		void next_card(bool three){wst.next(three);}
+		void reset_waste_current(){wst.reset_current();}
 	
 };
 

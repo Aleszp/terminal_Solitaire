@@ -1,6 +1,7 @@
 #ifndef _MAIN_HPP_
 #define _MAIN_HPP_
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <iostream>
 #include <stdint.h>
