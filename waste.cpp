@@ -97,16 +97,22 @@ void waste::add(card card_)
 }
 
 waste::~waste()
-{/*
-	card *ptr=first;
-	while(ptr->below!=NULL)
+{
+	current=first;
+	card* ptr;
+	do
 	{
-		cerr<<(unsigned)ptr->id<<endl;
-		ptr=ptr->below;
-		delete ptr->above;
+		ptr=remove_current();
+		if(ptr==NULL)
+		{
+			first=NULL;
+			current=NULL;
+			return;
+		}
+		else
+		{
+			delete ptr;
+		}
 	}
-	if(ptr!=NULL)
-		delete ptr;
-	first=NULL;
-	current=first;*/
+	while(true);
 }

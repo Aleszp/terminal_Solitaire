@@ -50,7 +50,6 @@ card_deck::card_deck()
 			los=rand()%52;
 		}
 		while(talia[los].id==0);
-		cerr<<i<<'\t'<<(unsigned)talia[los].id<<endl;
 		wst_.add(talia[los]);
 		talia[los]=0;
 	}
